@@ -1,21 +1,21 @@
 var rpio = require('rpio');
 
-var OnOff = require('onoff').Gpio,
-    input = new OnOff(24, 'in', 'both');
+// var OnOff = require('onoff').Gpio,
+//     input = new OnOff(24, 'in', 'both');
 
 var options = {
     gpiomem: false,
     mapping: 'physical'
 };
 
-input.watch(function (err, value) {
-    if (err) {
-        console.log("err");
-        throw err;
-    }
-
-    console.log("zmiana " + value);
-});
+// input.watch(function (err, value) {
+//     if (err) {
+//         console.log("err");
+//         throw err;
+//     }
+//
+//     console.log("zmiana " + value);
+// });
 
 
 console.log("init");
@@ -38,8 +38,8 @@ rpio.pwmSetClockDivider(4);
 rpio.pwmSetRange(33, 100);
 rpio.pwmSetRange(32, 100);
 //
-rpio.pwmSetData(33, 50);
-rpio.pwmSetData(32, 50);
+rpio.pwmSetData(33, 60);
+rpio.pwmSetData(32, 60);
 
 // function readValues() {
 //     console.log("val: " + rpio.read(24));
@@ -62,8 +62,8 @@ rpio.close(33);
 rpio.close(13);
 rpio.close(5);
 rpio.close(32);
-rpio.close(26);
+// rpio.close(26);
 
-process.on('SIGINT', function () {
-    input.unexport();
-});
+// process.on('SIGINT', function () {
+//     input.unexport();
+// });
