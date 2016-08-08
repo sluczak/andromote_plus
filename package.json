@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/sluczak/andromote_poc#readme",
   "dependencies": {
-    "pigpio": "^0.3.4"
+    "pigpio": "^0.3.4",
+    "sleep": "^3.0.1"
   }
 }
