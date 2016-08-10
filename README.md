@@ -26,3 +26,12 @@ Things to do:
 - [ ] Android Accessory communication
 - [ ] interface with android app
 - [ ] Bluetooth support
+ 
+
+---
+
+## Best practises
+http://nodeguide.com/style.html
+https://www.quora.com/What-are-some-best-architecture-practices-when-designing-a-nodejs-system
+https://devcenter.heroku.com/articles/node-best-practices
+
