@@ -10,8 +10,8 @@ Things to do:
 - [ ] CI implementation
 
 ### Middleware
-- [ ] device definition mechanism
-- [ ] device injection mechanism
+- [x] device definition mechanism
+- [x] device injection mechanism
 - [ ] functions definition mechanism
 - [ ] high level commands definition mechanism
 - [ ] high level - low level translation
@@ -27,11 +27,4 @@ Things to do:
 - [ ] interface with android app
 - [ ] Bluetooth support
  
-
----
-
-## Best practises
-http://nodeguide.com/style.html
-https://www.quora.com/What-are-some-best-architecture-practices-when-designing-a-nodejs-system
-https://devcenter.heroku.com/articles/node-best-practices
 
