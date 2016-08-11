@@ -9,10 +9,7 @@ function VNH2MotorModule(pinout) {
     this.signalB = new Gpio(pinout.pinB, {mode: Gpio.OUTPUT});
     this.signalPWM = new Gpio(pinout.pinPWM, {mode: Gpio.OUTPUT});
 
-    VNH2MotorModule.prototype.move = function(movement) {
-        var direction = movement.direction;
-        var speed = movement.speed;
-
+    VNH2MotorModule.prototype.spin = function spin(speed, direction) {
         if(direction != null) {
             applyDirection.call(this);
         }
