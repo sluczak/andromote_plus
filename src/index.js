@@ -3,7 +3,7 @@ var VNH2Driver = require('./devices/vnh2/vnh2_driver.js');
 var Wheel = require('./devices/wheel.js');
 var WheelEncoder = require('./devices/wheel_encoder.js');
 var eventEmitter = require('./core/common_event_emitter');
-var andromote = require('./setup/andromote');
+var andromote = require('./core/andromote');
 
 pigpio.configureClock(5, pigpio.CLOCK_PCM);
 
