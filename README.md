@@ -12,13 +12,13 @@ Things to do:
 ### Middleware
 - [x] device definition mechanism
 - [x] device injection mechanism
-- [ ] functions definition mechanism
+- [x] functions definition mechanism
 - [ ] high level commands definition mechanism
-- [ ] high level - low level translation
+- [x] high level - low level translation
 
 
 ### Steering
-- [ ] Distance based controlls
+- [x] Distance based controlls
 - [ ] Angle based turning
 - [ ] API
 
