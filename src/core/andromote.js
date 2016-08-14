@@ -1,9 +1,17 @@
 var _ = require('lodash');
-var FeatureFactory = require('../features/feature_factory');
+var queue = require('block-queue');
+var Guid = require('guid');
+var eventEmitter = require('../core/common_event_emitter');
 
 function Andromote() {
     this.devices = [];
-    this.features = [];
+    this.tasksQueue = queue(1, function(task, done) {
+        var guid = Guid.raw();
+        task.execute(guid);
+        eventEmitter.once('done_' + guid, function() {
+            done();
+        });
+    });
 
     Andromote.prototype.attachElements = function attachElements(configuration) {
         var self = this;
@@ -13,19 +21,12 @@ function Andromote() {
         });
     };
 
-    Andromote.prototype.loadFeatures = function loadFeatures(features) {
-        var self = this;
-        _.forEach(features, function(entry) {
-            self.features.push({name: entry.name, feature: entry.feature});
-        });
-    };
-
     Andromote.prototype.getElement = function getElement(elementName) {
         return _.find(this.devices, {'name': elementName}).device;
     };
 
-    Andromote.prototype.feature = function feature(featureName) {
-        return _.find(this.features, {'name': featureName}).feature;
+    Andromote.prototype.exec = function exec(task) {
+        this.tasksQueue.push(task);
     };
 }
 

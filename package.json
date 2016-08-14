@@ -25,7 +25,9 @@
   },
   "homepage": "https://github.com/sluczak/andromote_poc#readme",
   "dependencies": {
+    "block-queue": "0.0.2",
     "foreman": "1.4.1",
+    "guid": "0.0.12",
     "lodash": "4.14.2",
     "pigpio": "^0.3.4"
   }

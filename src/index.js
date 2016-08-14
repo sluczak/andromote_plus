@@ -1,15 +1,16 @@
 var pigpio = require('pigpio');
+var andromote = require('./core/andromote');
+var features = require('./features/features');
 var VNH2Driver = require('./devices/vnh2/vnh2_driver.js');
 var Wheel = require('./devices/wheel.js');
 var WheelEncoder = require('./devices/wheel_encoder.js');
-var eventEmitter = require('./core/common_event_emitter');
-var andromote = require('./core/andromote');
+var MoveFeatureFactory = require('./features/move');
 
 pigpio.configureClock(5, pigpio.CLOCK_PCM);
 
 var configuration = [
     {
-        name: 'VNH2',
+        name: 'drive',
         device: new VNH2Driver(),
         params: {
             motor1Pinout : {pinA : 17, pinB : 2, pinPWM : 13},
@@ -29,21 +30,16 @@ var configuration = [
         }
     }
 ];
+
+var featuresConfig = [
+    {
+        name: 'move',
+        feature: new MoveFeatureFactory('encoder_1')
+    }
+];
+
 andromote.attachElements(configuration);
+features.load(featuresConfig);
 
-var motorDriver = andromote.getElement('VNH2');
-var wheel = andromote.getElement('wheel');
-
-motorDriver.move({direction: 'forward', speed: 0.5});
-
-var distanceCM = 100;
-const limit = distanceCM * 10 / wheel.getPerimeter() * WheelEncoder.prototype.TICKS_PER_ROUND;
-
-(function() {
-    eventEmitter.on('encoder_1_tick', function(tickCount) {
-        if(tickCount > limit) {
-            motorDriver.stop();
-        }
-    });
-}());
-
+andromote.exec(features.get('move').forward(10));
+andromote.exec(features.get('move').backward(10));

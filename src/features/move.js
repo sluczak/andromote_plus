@@ -1,8 +1,66 @@
+var eventEmitter = require('../core/common_event_emitter');
 var andromote = require('../core/andromote');
-function MoveFeature() {
-    MoveFeature.prototype.forward = function forward() {
-        
+
+function MoveFeatureFactory(encoderName) {
+    this.encoderName = encoderName;
+
+    MoveFeatureFactory.prototype.create = function create() {
+        return new MoveFeature(encoderName);
     }
 }
 
-module.exports = Move;
+function MoveFeature(encoderName) {
+    this.encoderName = encoderName;
+    this.execute = undefined;
+
+    MoveFeature.prototype.forward = function forward(distance) {
+        this.performMove('forward', distance);
+        return this;
+    };
+
+    MoveFeature.prototype.backward = function backward(distance) {
+        this.performMove('backward', distance);
+        return this;
+    };
+
+    MoveFeature.prototype.left = function left(distance) {
+        this.performMove('left', distance);
+        return this;
+    };
+
+    MoveFeature.prototype.right = function right(distance) {
+        this.performMove('right', distance);
+        return this;
+    };
+
+    MoveFeature.prototype.stop = function stop() {
+        this.motorDriver.stop();
+        return this;
+    };
+
+    MoveFeature.prototype.performMove = function performMove(direction, distance) {
+        var self = this;
+        this.execute = function execute(guid) {
+            self.wheel = andromote.getElement('wheel');
+            self.encoder = andromote.getElement(encoderName);
+            self.motorDriver = andromote.getElement('drive');
+
+            var start = self.encoder.getCurrentTick();
+            var end = start + normalize(distance, self);
+            eventEmitter.on(self.encoderName + '_tick', function onTick(tickCount) {
+                if(tickCount > end) {
+                    self.motorDriver.stop();
+                    eventEmitter.emit('done_' + guid);
+                    eventEmitter.removeListener(self.encoderName + '_tick', onTick);
+                }
+            });
+            self.motorDriver.move({direction: direction, speed: 0.5});
+        };
+
+        function normalize(distanceCM, self) {
+            return distanceCM * 10 / self.wheel.getPerimeter() * self.encoder.TICKS_PER_ROUND;
+        }
+    }
+}
+
+module.exports = MoveFeatureFactory;
