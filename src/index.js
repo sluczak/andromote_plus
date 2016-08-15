@@ -1,3 +1,4 @@
+var restify = require('restify');
 var pigpio = require('pigpio');
 var andromote = require('./core/andromote');
 var features = require('./features/features');
@@ -8,6 +9,29 @@ var MoveFeatureFactory = require('./features/move');
 var RotateFeatureFactory = require('./features/rotate');
 
 pigpio.configureClock(5, pigpio.CLOCK_PCM);
+
+setTimeout(function restService() {
+    var server = restify.createServer({
+        name: 'Andromote'
+    });
+
+    server.use(restify.bodyParser({ }));
+
+    server.post('/andromote', function action(req, res, next) {
+        console.log(req.body);
+        execute(req.body);
+        res.send(200);
+        return next();
+    });
+
+    server.listen(8080, function() {
+        console.log('%s listening at %s', server.name, server.url);
+    });
+
+    function execute(args) {
+        eval(args);
+    }
+}, 10);
 
 var configuration = [
     {
@@ -46,7 +70,8 @@ var featuresConfig = [
 andromote.attachElements(configuration);
 features.load(featuresConfig);
 
-andromote.exec(features.get('move').forward(10));
-andromote.exec(features.get('move').backward(10));
-andromote.exec(features.get('rotate').left(180));
-andromote.exec(features.get('rotate').right(180));
+//
+// andromote.exec(features.get('move').forward(10));
+// andromote.exec(features.get('move').backward(10));
+// andromote.exec(features.get('rotate').left(180));
+// andromote.exec(features.get('rotate').right(180));
