@@ -1,35 +1,32 @@
 var eventEmitter = require('../core/common_event_emitter');
 var andromote = require('../core/andromote');
 
-function MoveFeatureFactory(encoderName) {
+function RotateFeatureFactory(encoderName, numberOfStepsFullTurn) {
     this.encoderName = encoderName;
+    this.numberOfStepsFullTurn = numberOfStepsFullTurn;
 
-    MoveFeatureFactory.prototype.create = function create() {
-        return new MoveFeature(encoderName);
+    RotateFeatureFactory.prototype.create = function create() {
+        return new RotateFeature(this.encoderName, this.numberOfStepsFullTurn);
     }
 }
 
-function MoveFeature(encoderName) {
+function RotateFeature(encoderName, numberOfStepsFullTurn) {
     this.encoderName = encoderName;
+    this.numberOfStepsFullTurn = numberOfStepsFullTurn;
     this.execute = undefined;
 
-    MoveFeature.prototype.forward = function forward(distance) {
-        this.performMove('forward', distance);
+    RotateFeature.prototype.left = function left(angle) {
+        this.performRotate('left', angle);
         return this;
     };
 
-    MoveFeature.prototype.backward = function backward(distance) {
-        this.performMove('backward', distance);
+    RotateFeature.prototype.right = function right(angle) {
+        this.performRotate('right', angle);
         return this;
     };
 
-    MoveFeature.prototype.stop = function stop() {
-        this.motorDriver.stop();
-        return this;
-    };
-
-    MoveFeature.prototype.performMove = function performMove(direction, distance) {
-        console.log('move ' + direction + " " + distance);
+    RotateFeature.prototype.performRotate = function performRotate(direction, degrees) {
+        console.log('rotate ' + direction + " " + degrees + " degrees");
         var self = this;
         this.execute = function execute(guid) {
             self.wheel = andromote.getElement('wheel');
@@ -37,7 +34,7 @@ function MoveFeature(encoderName) {
             self.motorDriver = andromote.getElement('drive');
 
             var start = self.encoder.getCurrentTick();
-            var end = start + normalize(distance, self);
+            var end = start + normalize(degrees, self);
             console.log('start ' + start + " end " + end);
             eventEmitter.on(self.encoderName + '_tick', function onTick(tickCount) {
                 if(tickCount > end) {
@@ -49,10 +46,10 @@ function MoveFeature(encoderName) {
             self.motorDriver.move({direction: direction, speed: 0.5});
         };
 
-        function normalize(distanceCM, self) {
-            return distanceCM * 10 / self.wheel.getPerimeter() * self.encoder.TICKS_PER_ROUND;
+        function normalize(degrees, self) {
+            return self.numberOfStepsFullTurn / 360 * degrees;
         }
     }
 }
 
-module.exports = MoveFeatureFactory;
+module.exports = RotateFeatureFactory;

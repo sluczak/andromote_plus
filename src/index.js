@@ -5,6 +5,7 @@ var VNH2Driver = require('./devices/vnh2/vnh2_driver.js');
 var Wheel = require('./devices/wheel.js');
 var WheelEncoder = require('./devices/wheel_encoder.js');
 var MoveFeatureFactory = require('./features/move');
+var RotateFeatureFactory = require('./features/rotate');
 
 pigpio.configureClock(5, pigpio.CLOCK_PCM);
 
@@ -35,6 +36,10 @@ var featuresConfig = [
     {
         name: 'move',
         feature: new MoveFeatureFactory('encoder_1')
+    },
+    {
+        name: 'rotate',
+        feature: new RotateFeatureFactory('encoder_1', 504)
     }
 ];
 
@@ -43,3 +48,5 @@ features.load(featuresConfig);
 
 andromote.exec(features.get('move').forward(10));
 andromote.exec(features.get('move').backward(10));
+andromote.exec(features.get('rotate').left(180));
+andromote.exec(features.get('rotate').right(180));
