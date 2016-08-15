@@ -35,7 +35,7 @@ function RotateFeature(encoderName, numberOfStepsFullTurn) {
 
             var start = self.encoder.getCurrentTick();
             var end = start + normalize(degrees, self);
-            console.log('start ' + start + " end " + end);
+            // console.log('start ' + start + " end " + end);
             eventEmitter.on(self.encoderName + '_tick', function onTick(tickCount) {
                 if(tickCount > end) {
                     self.motorDriver.stop();

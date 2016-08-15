@@ -38,7 +38,7 @@ function MoveFeature(encoderName) {
 
             var start = self.encoder.getCurrentTick();
             var end = start + normalize(distance, self);
-            console.log('start ' + start + " end " + end);
+            // console.log('start ' + start + " end " + end);
             eventEmitter.on(self.encoderName + '_tick', function onTick(tickCount) {
                 if(tickCount > end) {
                     self.motorDriver.stop();

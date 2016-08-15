@@ -9,6 +9,23 @@ function VNH2MotorModule(pinout) {
     this.signalB = new Gpio(pinout.pinB, {mode: Gpio.OUTPUT});
     this.signalPWM = new Gpio(pinout.pinPWM, {mode: Gpio.OUTPUT});
 
+    var self = this;
+    process.on('SIGINT', function () {
+        self.signalPWM.pwmWrite(0);
+        process.exit(2);
+    });
+
+    process.on('exit', function() {
+        self.signalPWM.pwmWrite(0);
+    });
+
+    process.on('uncaughtException', function(e) {
+        console.log('Uncaught Exception...');
+        console.log(e.stack);
+        self.signalPWM.pwmWrite(0);
+        process.exit(99);
+    });
+
     VNH2MotorModule.prototype.spin = function spin(speed, direction) {
         if(direction != null) {
             applyDirection.call(this);
