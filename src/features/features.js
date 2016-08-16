@@ -3,6 +3,10 @@ var _ = require('lodash');
 function Features() {
     this.features = [];
 
+    Features.prototype.clear = function clear() {
+        this.features = [];
+    };
+
     Features.prototype.load = function loadFeatures(features) {
         var self = this;
         _.forEach(features, function(entry) {

@@ -5,6 +5,7 @@ var eventEmitter = require('../core/common_event_emitter');
 
 function Andromote() {
     this.devices = [];
+
     this.tasksQueue = queue(1, function(task, done) {
         var guid = Guid.raw();
         task.execute(guid);
@@ -12,6 +13,10 @@ function Andromote() {
             done();
         });
     });
+
+    Andromote.prototype.clearDevices = function clearDevices() {
+        this.devices = [];
+    };
 
     Andromote.prototype.attachElements = function attachElements(configuration) {
         var self = this;
