@@ -33,7 +33,7 @@ function MoveFeature(encoderName) {
         var self = this;
         this.execute = function execute(guid) {
             self.wheel = andromote.getElement('wheel');
-            self.encoder = andromote.getElement(encoderName);
+            self.encoder = andromote.getElement(this.encoderName);
             self.motorDriver = andromote.getElement('drive');
 
             var start = self.encoder.getCurrentTick();
